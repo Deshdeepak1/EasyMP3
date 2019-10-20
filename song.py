@@ -1,5 +1,4 @@
 from bs4 import BeautifulSoup
-from clint.textui import progress
 import requests
 import os
 import sys
