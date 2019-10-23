@@ -69,4 +69,4 @@ while True:
         print("Downloading song...")
         myfile = requests.get(surl)
         open('/home/amulya/Music/'+ str(songs[3*chosen_song].get_text()) +'.mp3', 'wb').write(myfile.content)
-    print("Download Completed.")
+    print("Download Completed!")
