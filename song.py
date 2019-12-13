@@ -16,12 +16,11 @@ while True:
     url = "https://downloadming2.com/category/bollywood-mp3/page/"+str(cp)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
-    links = soup.find_all("a",{"class":"more-link"})
     disp = soup.find_all("a",{"rel":"bookmark"})
     cc=0
     while cc<len(disp):
-        print(int(cc/2) , " -- ",disp[cc].get_text())
-        cc+=2
+        print(int(cc) , " -- ",disp[cc].get_text())
+        cc+=1
     print()
     print("Enter choice... or n/p for next/previous page... or e to exit")
     choice = input()
@@ -33,7 +32,7 @@ while True:
         continue
     if choice=="e":
         break
-    aurl=links[int(choice)]["href"]
+    aurl=disp[int(choice)]["href"]
     apage=requests.get(aurl)
     asoup = BeautifulSoup(apage.content, 'html.parser')
     songs = asoup.find_all("td")
