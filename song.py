@@ -1,6 +1,7 @@
 from bs4 import BeautifulSoup
 import requests
 import os
+import urllib
 import sys
 import wget
 import zipfile
@@ -17,7 +18,7 @@ while True:
     print()
     print("Page ",cp)
     print()
-    url = "https://downloadming2.com/category/bollywood-mp3/page/"+str(cp)
+    url = "https://downloadming3.com/category/bollywood-mp3-songs/page/"+str(cp)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
     disp = soup.find_all("a",{"rel":"bookmark"})
@@ -71,7 +72,10 @@ while True:
         os.remove(zip_file)
     else:
         print("Downloading song...")
-        myfile = requests.get(surl)
+        print(surl)
+        #myfile = requests.get(surl)
+        myfile=urllib.request.urlopen(surl)
+        print(myfile)
         song_file = os.path.join(MusicFolder, str(songs[3*chosen_song].get_text()) +'.mp3')
         open(song_file, 'wb').write(myfile.content)
     print("Download Completed!")
