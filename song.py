@@ -5,6 +5,10 @@ import sys
 import wget
 import zipfile
 
+HOME = os.environ.get("HOME")
+MusicFolder = os.path.join(HOME,'Music')
+if not os.path.isdir(MusicFolder):
+    os.mkdir(MusicFolder)
 cp=1
 while True:
     os.system('clear')
@@ -60,12 +64,14 @@ while True:
     if chosen_song == ls:
         print("Downloading zip file...")
         myfile = requests.get(surl)
-        open('/home/amulya/Music/'+ str(asoup.find("h1").get_text()) +'.zip', 'wb').write(myfile.content)
-        with zipfile.ZipFile('/home/amulya/Music/'+ str(asoup.find("h1").get_text()) +'.zip', 'r') as zip_ref:
-            zip_ref.extractall('/home/amulya/Music')
-        os.remove('/home/amulya/Music/'+ str(asoup.find("h1").get_text()) +'.zip')
+        zip_file = os.path.join(MusicFolder, str(asoup.find("h1").get_text()) +'.zip')
+        open(zip_file, 'wb').write(myfile.content)
+        with zipfile.ZipFile(zip_file, 'r') as zip_ref:
+            zip_ref.extractall(MusicFolder)
+        os.remove(zip_file)
     else:
         print("Downloading song...")
         myfile = requests.get(surl)
-        open('/home/amulya/Music/'+ str(songs[3*chosen_song].get_text()) +'.mp3', 'wb').write(myfile.content)
+        song_file = os.path.join(MusicFolder, str(songs[3*chosen_song].get_text()) +'.mp3')
+        open(song_file, 'wb').write(myfile.content)
     print("Download Completed!")
