@@ -2,8 +2,6 @@ from bs4 import BeautifulSoup
 import requests
 import os
 import urllib
-import sys
-import wget
 import zipfile
 
 HOME = os.environ.get("HOME")
