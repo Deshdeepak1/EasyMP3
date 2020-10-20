@@ -3,6 +3,7 @@ import requests
 import os
 import urllib
 import zipfile
+from tqdm import tqdm
 
 HOME = os.environ.get("HOME")
 MusicFolder = os.path.join(HOME,'Music')
@@ -63,12 +64,25 @@ while True:
     print("2. 320 Kbps")
     chosen_format = int(input("Enter format: "))
     surl = songs_rows[chosen_song-1].find_all("td")[chosen_format].find_next("a")["href"]
-    req = urllib.request.Request(surl,headers={'Referer': 'https://downloadming3.com/'})
-    myfile = urllib.request.urlopen(req)      
+    hdr = {'Referer': 'https://downloadming3.com/'}
+    total = int(requests.head(surl,headers = hdr).headers['Content-Length'])
+    req = urllib.request.Request(surl,headers = hdr)
+    web_file = urllib.request.urlopen(req)
     if chosen_song == ls:
         print("Downloading zip file...")
         zip_file = os.path.join(MusicFolder, str(asoup.find("h1").get_text()) +'.zip')
-        open(zip_file, 'wb').write(myfile.read())
+        with open(zip_file, 'wb') as file, tqdm(
+            desc=os.path.basename(zip_file),
+            total=total,
+            unit='iB',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as bar:
+            while True:
+                data = web_file.read(1024)
+                if not data:break
+                size = file.write(data)
+                bar.update(size)
         with zipfile.ZipFile(zip_file, 'r') as zip_ref:
             zip_ref.extractall(MusicFolder)
         os.remove(zip_file)
@@ -76,5 +90,16 @@ while True:
         print("Downloading song...")
         print(surl)
         song_file = os.path.join(MusicFolder, str(songs_rows[chosen_song-1].find_all("td")[0].get_text()) +'.mp3')
-        open(song_file, 'wb').write(myfile.read())
+        with open(song_file, 'wb') as file, tqdm(
+            desc=os.path.basename(song_file),
+            total=total,
+            unit='iB',
+            unit_scale=True,
+            unit_divisor=1024,
+        ) as bar:
+            while True:
+                data = web_file.read(1024)
+                if not data:break
+                size = file.write(data)
+                bar.update(size)
     print("Download Completed!")
