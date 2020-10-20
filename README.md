@@ -3,7 +3,7 @@
 # EasyMP3
 Downloading latest songs from terminal made easy!
 
-Python dependencies - bs4, requests
+Python dependencies - bs4, requests, tqdm
 
 # Usage
  1. python3 -m venv venv
