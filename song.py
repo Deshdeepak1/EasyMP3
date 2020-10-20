@@ -4,7 +4,7 @@ Download songs from https://downloadming3.com
 
 import os
 import sys
-import urllib
+import urllib.request
 import zipfile
 import requests
 from tqdm import tqdm
@@ -38,9 +38,9 @@ def download_song(song_url, song_file, is_zip):
             size = file.write(data)
             progress_bar.update(size)
     if is_zip:
-        with zipfile.ZipFile(file, 'r') as zip_ref:
+        with zipfile.ZipFile(song_file, 'r') as zip_ref:
             zip_ref.extractall(MusicFolder)
-        os.remove(file)
+        os.remove(song_file)
 
 
 def show_song_page(page_num, songs_page):
@@ -123,8 +123,8 @@ def main(page_num):
     print()
     print("Page ", page_num)
     print()
-    url = "https://downloadming3.com/category/ \
-        bollywood-mp3-songs/page/" + str(page_num)
+    url = "https://downloadming3.com/category/bollywood-mp3-songs/page/" + \
+        str(page_num)
     page = requests.get(url)
     soup = BeautifulSoup(page.content, 'html.parser')
     movies_list = soup.find_all("a", {"rel": "bookmark"})
